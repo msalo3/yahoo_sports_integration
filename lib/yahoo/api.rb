@@ -1,15 +1,21 @@
 require 'json'
 require 'rest-client'
+require 'crack/xml'
 
 module Yahoo
   class Api
-    attr_accessor :config, :payload
 
-    def initialize(yahoo_url, consumer_key, consumer_secret)
-      @yahoo_url = ('https://' + yahoo_url + '/wp-json/wc/v2/').delete(' ')
-      @url_end = '&consumer_key=' + consumer_key + '&consumer_secret=' + consumer_secret
-      @variation_url_end = '?consumer_key=' + consumer_key + '&consumer_secret=' + consumer_secret
-      @get_limit = "50"
+    def initialize(key, secret, access_token, refresh_token)
+      @url = "https://fantasysports.yahooapis.com/fantasy/v2/"
+      @key = key
+      @secret = secret
+      @access_token = access_token
+      @refresh_token = refresh_token
+    end
+
+    def get_league(id, sport)
+      url_end = 'league/' + sport + '.l.' + id
+      response = Crack::XML.parse(RestClient.get @url + url_end, {:Authorization => 'Bearer ' + @access_token.to_s })
     end
 
     # Get all products after 'since'
@@ -23,5 +29,5 @@ module Yahoo
         response = RestClient.get @yahoo_url + 'products?per_page=' + @get_limit + @url_end
       end
     end
-
+  end
 end

@@ -9,6 +9,8 @@ gem 'capistrano'
 gem 'rest-client'
 gem 'require_all'
 gem 'honeybadger', '~> 2.0'
+gem 'nokogiri'
+gem 'crack'
 
 group :development do
   gem 'shotgun'

@@ -1,5 +1,5 @@
 FROM ruby:2.4.2-slim-stretch
-MAINTAINER NuRelm <development@nurelm.com>
+MAINTAINER Marc <marcsalo455@gmail.com>
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \

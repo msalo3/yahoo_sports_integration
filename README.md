@@ -1,5 +1,9 @@
 # Yahoo Integration
 
+##NOTE:
+NuRelm staff contributions to their Open Source integrations with FlowLink
+allowed for this project to be a reality
+
 ## Overview
 
 ## Developer Environment Setup
@@ -8,7 +12,7 @@ Perform the following commands to setup your development environment:
 ```sh
 $ docker rm -f yahoo-integration-container
 $ docker build -t yahoo-integration .
-$ docker run -t -e VIRTUAL_HOST=yahoo_integration.flowlink.io -e RAILS_ENV=development -v $PWD:/app -p 3001:5000 --name yahoo-integration-container yahoo-integration
+$ docker run -t -e VIRTUAL_HOST=yahoo-integration.flowlink.io -e RAILS_ENV=development -v $PWD:/app -p 3001:5000 --name yahoo-integration-container yahoo-integration
 ```
 
 Then access the local integration at http://localhost:3001
