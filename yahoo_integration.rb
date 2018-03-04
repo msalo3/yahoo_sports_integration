@@ -27,10 +27,13 @@ class YahooIntegration < EndpointBase::Sinatra::Base
       #     "league_id": "9001",
       #     "sport": "nhl"
       yahoo_api = new_yahoo_api_request(@payload, @config)
-      league_info = yahoo_api.get_league(@config[:league_id], @config[:sport])
-      league_obj = Yahoo::League.new(league_info['fantasy_content']['league']).as_hash
+      url_end = 'league/' + @config[:sport] + '.l.' + @config[:league_id] + '?format=json'
+      league_info = yahoo_api.request(url_end)
+      league_obj = Yahoo::League.new(league_info['fantasy_content']['league'].first).as_hash
       add_object :league, league_obj
 
+      # We should eventually have a csv available as a download
+      # Does the csv download automatically? Probably from the site itself...
       result 200, "Success! Retrieved data for league: #{league_obj[:name]}!"
     rescue => e
       puts e.backtrace

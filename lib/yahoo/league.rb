@@ -2,7 +2,6 @@ module Yahoo
   class League
 
     def initialize(hash)
-      puts hash
       @id = hash['league_id']
       @name = hash['name']
       @number_of_teams = hash['num_teams']
@@ -14,7 +13,7 @@ module Yahoo
 
     def as_hash
       {
-        id: @id.to_s,
+        id: @id,
         name: @name,
         number_of_teams: @number_of_teams,
         cash_league: @is_cash_league,

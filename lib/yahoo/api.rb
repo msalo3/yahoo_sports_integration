@@ -1,6 +1,5 @@
 require 'json'
 require 'rest-client'
-require 'crack/xml'
 
 module Yahoo
   class Api
@@ -13,21 +12,30 @@ module Yahoo
       @refresh_token = refresh_token
     end
 
+
+    # NOTE: I need to handle hourly token change
+    # I should issue a try/catch or begin/rescue maybe?
+    # Then write a function (private?? <-- should research this) for refreshing the token
+
+    # If resfresh token is expired, just manual for now? How to handle?
+
     def get_league(id, sport)
-      url_end = 'league/' + sport + '.l.' + id
-      response = Crack::XML.parse(RestClient.get @url + url_end, {:Authorization => 'Bearer ' + @access_token.to_s })
+      url_end = 'league/' + sport + '.l.' + id + '?format=json'
+      data = RestClient.get @url + url_end, {:Authorization => 'Bearer ' + @access_token.to_s}
+      puts data
+      response = JSON.parse(data)
     end
 
-    # Get all products after 'since'
-    # Returns an array of Yahoo::Product objects or raises an error
-    def get_products(since='', page_number='')
-      if page_number != '1' && page_number != '' && page_number
-        response = RestClient.get @yahoo_url + 'products?per_page=' + @get_limit + '&page=' + page_number.to_s + @url_end
-      elsif since && since != ''
-        response = RestClient.get @yahoo_url + 'products?per_page=' + @get_limit + '&after=' + since.to_s + @url_end
-      else
-        response = RestClient.get @yahoo_url + 'products?per_page=' + @get_limit + @url_end
-      end
+    def request(url_end = "")
+      data = JSON.parse(RestClient.get @url + url_end, {:Authorization => 'Bearer ' + @access_token.to_s})
+    rescue RestClient::Unauthorized, RestClient::Forbidden => err
+      puts 'Access denied'
+      new_url = "https://api.login.yahoo.com/oauth2/get_token"
+      response = RestClient::Request.execute method: :post, url: new_url, user: @key, password: @secret, payload: { redirect_uri: 'oob', grant_type: 'refresh_token', refresh_token: refresh_token}
+      err.response
+    else
+      data
     end
+
   end
 end
