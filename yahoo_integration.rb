@@ -21,6 +21,14 @@ class YahooIntegration < EndpointBase::Sinatra::Base
     also_reload './lib/**/*'
   end
 
+  get '/test' do
+    begin
+      result 200, "Hit test endpoint and succeeded!"
+    rescue => e
+      puts e.backtrace
+      result 500, 'Hit test endpoint, but failed somehow...'
+  end
+
   post '/get_league' do
     begin
       # Config object should contain the normal params as well as:
