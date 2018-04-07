@@ -27,6 +27,7 @@ class YahooIntegration < EndpointBase::Sinatra::Base
     rescue => e
       puts e.backtrace
       result 500, 'Hit test endpoint, but failed somehow...'
+    end
   end
 
   post '/get_league' do
