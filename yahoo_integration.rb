@@ -23,6 +23,7 @@ class YahooIntegration < EndpointBase::Sinatra::Base
 
   get '/test' do
     begin
+      add_object test_payload, { id: 1, payload: 'test' }
       result 200, "Hit test endpoint and succeeded!"
     rescue => e
       puts e.backtrace
