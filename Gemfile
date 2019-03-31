@@ -11,6 +11,7 @@ gem 'require_all'
 gem 'honeybadger', '~> 2.0'
 gem 'nokogiri'
 gem 'crack'
+gem 'oauth2'
 
 group :development do
   gem 'shotgun'

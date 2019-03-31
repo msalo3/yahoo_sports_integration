@@ -1,15 +1,28 @@
 require 'json'
+require 'oauth2'
 require 'rest-client'
 
 module Yahoo
   class Api
+    attr_accessor :client, :token
 
-    def initialize(key, secret, access_token, refresh_token)
+    def initialize(client_id, client_secret, redirect_uri)
       @url = "https://fantasysports.yahooapis.com/fantasy/v2/"
-      @key = key
-      @secret = secret
-      @access_token = access_token
-      @refresh_token = refresh_token
+      @redirect_uri = redirect_uri
+
+      @client = OAuth2::Client.new(client_id, client_secret, :site => @url)
+    end
+
+    def get_token
+      client.auth_code.authorize_url(:redirect_uri => @redirect_uri)
+      # => "https://example.org/oauth/authorization?response_type=code&client_id=client_id&redirect_uri=http://localhost:8080/oauth2/callback"
+
+      @token = client.auth_code.get_token('authorization_code_value', :redirect_uri => 'http://localhost:8080/oauth2/callback', :headers => {'Authorization' => 'Basic some_password'})
+    end
+
+    def get_data
+      response = token.get('/api/resource', :params => { 'query_foo' => 'bar' })
+      response.class.name
     end
 
 
